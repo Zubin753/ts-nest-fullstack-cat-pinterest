@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: API сервиса для тестового задания
+  version: 0.1.0
+tags:
+  - name: cats
+    description: Всё что касается котиков
+  - name: users
+    description: Всё что касается пользователей
+paths:
+  /likes:
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - cats
+      summary: Список лайков
+      operationId: listLikes
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Like'
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - cats
+      summary: Добавление лайка
+      operationId: newLike
+      requestBody:
+        description: Новый лайк
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Like'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Like'
+        '405':
+          description: Invalid input
+  /likes/{cat_id}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - cats
+      summary: Удаление лайка
+      operationId: dropLike
+      parameters:
+        - name: cat_id
+          description: id котика из https://thecatapi.com
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: Like not found
+  /user:
+    post:
+      tags:
+        - users
+      summary: Добавление пользователя
+      operationId: newUser
+      requestBody:
+        description: Новый пользователь
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          headers:
+            X-Auth-Token:
+              description: Токен для последующей авторизации, например sha256(user_id + secret_salt)
+              example: 3525dcdddea774939652f7f11df6d7db10a9db35a5d758c64d600a00c1cc41be
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '405':
+          description: Invalid input
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Ожидается токен, выдаваемый при регистрации пользователя
+      bearerFormat: SHA256
+  schemas:
+    Like:
+      type: object
+      required:
+        - cat_id
+      properties:
+        cat_id:
+          description: Идентификатор котика из https://thecatapi.com
+          type: string
+          example: asu7as
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-03-20T09:12:28Z
+          description: Время создания лайка
+    User:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+          description: Логин пользователя
+        password:
+          type: string
+          description: Пароль пользователя
+
