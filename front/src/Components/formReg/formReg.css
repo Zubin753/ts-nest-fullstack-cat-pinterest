@@ -1,0 +1,22 @@
+.reg--form{
+
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.reg--form > div{
+    margin: 20px 0px;
+}
+
+.reg--form .header{
+    font-family: 'Roboto';
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 700;
+    color: #1E88E5;
+    text-align: center;
+}

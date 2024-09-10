@@ -1,0 +1,29 @@
+.otherArea{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    display: none;
+    z-index: 1;
+}
+
+.mainArea{
+    background-color: white;
+    padding: 25px;
+    min-height: 30%;
+    height: 50%;
+    width: 30%;
+    min-width: 300px;
+    border-radius: 15px;
+
+}
+
+.active{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}

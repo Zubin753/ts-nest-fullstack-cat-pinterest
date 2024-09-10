@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from "./Components/navbar/Navbar.tsx";
+import "./App.css";
+import { useEffect, useState } from "react";
+
+import FormReg from "./Components/formReg/formReg.tsx";
+import MyModal from "./UI/modal/MyModal.tsx";
+import UserService from "./api/userService.ts";
+import { BrowserRouter } from "react-router-dom";
+import MyRouter from "./Components/MyRouter/MyRouter.tsx";
+import { useAction } from "./hooks/useMyDispatch.ts";
+import PopupMessage from "./UI/popupMessage/PopupMessage.tsx";
+import useNotification from "./hooks/useNotification.ts";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [regModal, setRegModal] = useState(false);
+  const [avtModal, setAvtModal] = useState(false);
+
+  const { auth, authByToken } = useAction();
+
+  useEffect(() => {
+    authByToken();
+  }, []);
+
+  const { notification, openPopup, popupText, popupStyle } = useNotification();
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className={"main"}>
+      <BrowserRouter>
+        {openPopup && <PopupMessage text={popupText} typeStyle={popupStyle} />}
+        <Navbar
+          setReg={setRegModal}
+          setAvt={setAvtModal}
+          giveMes={notification}
+        />
+        <MyRouter />
+        <MyModal active={regModal} setActive={setRegModal}>
+          <FormReg
+            textHeader={
+              "Зарегистрируйтесь в серивсе, чтобы вы смогли лайкать котиков!"
+            }
+            callback={UserService.register}
+            textButton={"Зарегистрироваться"}
+            openModal={setRegModal}
+            giveMes={notification}
+            succesText={"Успешная регистрация!"}
+          />
+        </MyModal>
+        <MyModal active={avtModal} setActive={setAvtModal}>
+          <FormReg
+            textHeader={"Авторизуйтесь, пожалуйста!"}
+            callback={auth}
+            textButton={"Войти"}
+            openModal={setAvtModal}
+            giveMes={notification}
+            succesText={`Добро пожаловать!`}
+          />
+        </MyModal>
+      </BrowserRouter>
+    </div>
+  );
 }
 
-export default App
+export default App;

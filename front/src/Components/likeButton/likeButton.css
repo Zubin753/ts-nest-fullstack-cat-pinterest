@@ -1,0 +1,42 @@
+.button--like{
+    background-image: url('./haventLike.svg');
+    border: none;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 40px;
+    height: 36px;
+    visibility: hidden;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.button--like--have{
+    background-image: url('./haveLike.svg');
+}
+
+.button--like--active {
+    visibility: visible
+}
+
+.button--like--click{
+    background-image: url('./clickLike.svg');
+    animation: zoom 500ms ease-in-out;
+}
+
+@keyframes zoom {
+    0%{
+        scale: 1;
+    }
+
+    50%{
+        scale: 1.3;
+    }
+
+    100%{
+        scale: 1;
+    }
+}
